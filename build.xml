@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ant_run" default="result">
+	<property name="build.dir" value="build" />
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />
+	<property name="reports.dir" value="report" />
+	<property name="test.output" value="test-output" />
+	<property name="xml" value="testNg.xml" />
+
+    <path id="classpath">
+        <pathelement location="${build.dir}/classes"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+    
+	<!-- ====================== Defines the testng task========================== -->
+    <taskdef resource="testngtasks" classpathref="classpath"/>
+    
+    <!-- =============Initialise the required folder structure Target =========== -->
+    <target name="init" depends="clean" description="Create build directories">
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.dir}/classes" />
+		<mkdir dir="${reports.dir}" />
+		<mkdir dir="${test.output}" />
+	</target>
+	
+    <!-- ==================== Clean the folders=============================== -->
+	<target name="clean" description="Delete build and stage directories">
+		<delete dir="${build.dir}" />
+		<delete dir="${reports.dir}" />
+		<delete dir="${test.output}" />
+	</target>    
+    
+	<!-- =============Compile the test files =========== -->
+	<target name="compile" depends="init">	
+		<echo message="Compiling Tests" />
+		<javac srcdir="${src.dir}" destdir="${build.dir}/classes" executable="javac" classpathref="classpath">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+	
+	<!-- ==================== Runs the tests using testng========================== -->
+	<target name="run" depends="compile">
+	    <echo message="Running Tests....." />
+			<testng classpathref="classpath" outputDir="${test.output}" haltOnFailure="false" failureProperty="testsFailed">
+			    <sysproperty key="suite" value="${suite}"/>
+				<sysproperty key="browser" value="${browser}"/>
+				<sysproperty key="environment" value="${environment}"/>
+				<sysproperty key="appType" value="${appType}"/>
+				<sysproperty key="device" value="${device}"/>
+		        <xmlfileset file="${suite}.xml"/>
+		    </testng>
+	</target>
+	<!-- ==================== Sending status report ========================== -->
+	<target name="sendemail" depends="run">
+		<java classname="utility.EmailUtility" classpathref="classpath">
+		<sysproperty key="ChartEnbled" value="true"/>
+		</java>
+	</target>
+	
+	<!-- ==================== Marking Build failure on tests failure ========================== -->
+	<target name="result"  depends="sendemail">
+  		<fail if="testsFailed" message="Tests are failed. Please check the logs" />
+ 	</target>
+ 	
+</project>
