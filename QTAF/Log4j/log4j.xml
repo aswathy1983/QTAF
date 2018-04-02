@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="Logfile" class="org.apache.log4j.FileAppender">
+		<param name="File" value="Log4j/Logs/Logfile.log" />
+		<param name="Append" value="false" />
+		<param name="Threshold" value="INFO" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd-MM-yyyy HH:mm:ss}   %-5p-%c{1} %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="Failed-Test-Cases" class="org.apache.log4j.FileAppender">
+		<param name="File" value="Log4j/Logs/Failed-Test-Cases.log" />
+		<param name="Append" value="false" />
+		<param name="Threshold" value="WARN" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd-MM-yyyy HH:mm:ss}   %-5p-%c{1} %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.utility.Log">
+		<appender-ref ref="Failed-Test-Cases" />
+	</logger>
+
+	<root>
+		<level value="ALL" />
+		<appender-ref ref="Logfile" />
+	</root>
+
+</log4j:configuration>

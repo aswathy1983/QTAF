@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Spectrum Logo Verification" configfailurepolicy="continue" preserve-order="true">
+	
+	<listeners>
+		<listener class-name="configure.ReportGenerator" ></listener>
+		<listener class-name="configure.ExtentListener" ></listener>
+	</listeners>
+ 	<parameter name = "browser" value = "chrome" ></parameter>
+ 	<parameter name = "environment" value = "production" ></parameter>
+	<test name="Check Spectrum Logo">
+		<classes>
+			<class name="testmethods.verifySpectrumLogoTest"> 
+			</class>
+		</classes>
+	</test> 
+	</suite> 
